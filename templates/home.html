@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <title>PlantAI</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+    }
+    .navbar-custom {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+    .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+      color: green;
+      font-weight: bold;
+    }
+    .container-center {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .bg-green {
+      background-color: #228B22;
+    }
+
+    .content-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .text-content {
+      flex: 1;
+      padding: 20px;
+      font-size: 3.2em;
+      color: #333;
+      margin-top: 10%;
+    }
+
+    .image-content {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .image-content img {
+    width: auto;
+    height: 80vh; /* Adjusts height to 50% of the viewport height */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      background-image: url("{{url_for('static', filename='images/background.jpeg')}}");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-dark navbar-expand-lg bg-green">
+    <a class="navbar-brand" href="#">PlantAI</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="#" id="homeLink">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/index">Predict</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+        
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content-container">
+    <!-- Text Section -->
+    <div class="text-content">
+      <p>Welcome to PlantAI -<br> Your Plant Health Companion!</p>
+    </div>
+  </div>
+
+
+
+</body>
+</html>

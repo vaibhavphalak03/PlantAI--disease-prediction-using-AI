@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" crossorigin="anonymous">
+  <title>PlantAI</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-image: url('bk.jpg');
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      background-image: url("{{url_for('static', filename='images/background.jpeg')}}");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center;
+    }
+    .navbar-custom {
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+    .navbar-custom .navbar-brand, .navbar-custom .nav-link {
+      color: green;
+      font-weight: bold;
+    }
+    .container-center {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+     
+    }
+    .upload-div {
+      width: 400px;
+      height: 450px;
+      border: 2px solid #6c757d;
+      /*background-color: rgba(133, 125, 125, 0.8);*/
+      background-color: rgba(255, 255, 255, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      
+    }
+    .uploaded-image {
+      max-width: 100%;
+      max-height: 60%;
+      display: none;
+    }
+    .success-message, .prediction-result {
+      margin-top: 10px;
+      font-weight: bold;
+      display: none;
+    }
+    .bg-green {
+      background-color: #228B22;
+    }
+    .footer-buttons {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #fileInput {
+      margin-bottom: 10px;
+    }
+
+    .prediction-result {
+    margin-top: 10px;
+    font-weight: bold;
+    color: red;
+    display: none;
+  }
+
+
+
+
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-dark navbar-expand-lg bg-green">
+    <a class="navbar-brand" href="#">PlantAI</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item"><a class="nav-link" href="/" id="homeLink">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Predict</a></li>
+        <li class="nav-item"><a class="nav-link" href="/about">About Us</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Container for Home message -->
+  <div class="container-center">
+    <div class="upload-div">
+      <img id="uploadedImage" class="uploaded-image" alt="Uploaded Image">
+      <p id="successMessage" class="success-message text-success">File Uploaded Successfully!</p>
+
+      <!-- Footer with buttons at the bottom of the div -->
+      <div class="footer-buttons">
+        <input type="file" id="fileInput" accept="image/*">
+        <button id="predictButton" class="btn btn-success mt-3" style="display: none;">Predict</button>
+      </div>
+      
+      <p id="predictionResult" class="prediction-result"></p>
+
+    </div>
+  </div>
+
+  <script>
+    let uploadedFile;
+
+
+    // Handle image upload
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        uploadedFile = file;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('uploadedImage').src = e.target.result;
+          document.getElementById('uploadedImage').style.display = 'block';
+          document.getElementById('successMessage').style.display = 'block';
+          document.getElementById('predictButton').style.display = 'inline-block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    document.getElementById('predictButton').addEventListener('click', function() {
+      const formData = new FormData();
+      formData.append('file', uploadedFile);
+
+      fetch('/predict', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.predicted_class) {
+          document.getElementById('predictionResult').innerText = "Prediction: " + data.predicted_class;
+        } else if (data.error) {
+          document.getElementById('predictionResult').innerText = "Error: " + data.error;
+        }
+        document.getElementById('predictionResult').style.display = 'block';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error making prediction');
+      });
+
+
+    });
+  </script>
+
+</body>
+</html>
